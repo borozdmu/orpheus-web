@@ -7,7 +7,7 @@ function screen(route: RouteLocationNormalized) {
   return route.name === 'session' || route.name === 'run' ? `session:${String(route.params.sid)}` : String(route.name)
 }
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'analytics', component: () => import('../views/AnalyticsView.vue') },
     { path: '/sessions', name: 'sessions', component: () => import('../views/SessionsView.vue') },

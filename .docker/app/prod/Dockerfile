@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+ARG ORPHEUS_WEB_BASE_PATH=/
 RUN npm run api:check && npm run build
 
 FROM nginx:1.28-alpine

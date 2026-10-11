@@ -187,6 +187,21 @@ ingress must preserve the browser Host, Origin, Cookie and Set-Cookie headers,
 disable buffering for SSE, and allow long-lived streams. No BFF, auth proxy or
 shared Bearer injection is used.
 
+For a deployment below a URL prefix, build with
+`--build-arg ORPHEUS_WEB_BASE_PATH=/orpheus/`. The prefix must start and end
+with `/`; its default is `/`. Configure the ingress to route only that prefix
+and strip it before forwarding to this container. API requests, SSE, assets,
+navigation and deep links stay under the prefix. For development, set the same
+environment variable before `npm run dev`.
+
+This is suitable for read-only access protected by the ingress. The core's
+SAML callback endpoints still require their documented root-origin routes;
+this option alone does not relocate a SAML deployment.
+
+Run the prefix browser test with
+`ORPHEUS_WEB_BASE_PATH=/orpheus/ ORPHEUS_WEB_TEST_PORT=14173 npm run e2e`.
+`ORPHEUS_WEB_TEST_PORT` also selects a free port for the regular browser suite.
+
 Configure browser access **in the core**, not in this image:
 
 | Core mode | UI behavior |
