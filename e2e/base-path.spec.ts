@@ -21,5 +21,6 @@ test('keeps navigation, API, SSE, assets and deep-link reloads under the base', 
     if (/\/(api|auth|assets)\/|\.(svg|png|woff2)$/.test(path)) expect(path).toMatch(new RegExp(`^${base}`))
   }
   const images = await page.locator('header img').evaluateAll((images) => images.map((img) => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))
+  expect(images.length).toBeGreaterThan(0)
   expect(images.every(Boolean)).toBe(true)
 })
