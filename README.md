@@ -271,6 +271,8 @@ and type generation remain offline. `make audit`, `make vuln`, `make deadcode` a
 `make lint-docker` also run separately. The filesystem scan does not inspect OS
 packages in the final nginx image.
 
+Vue 3.5 uses a single component instance type. The pinned vue-i18n 11.4.20 declarations also name an instance type from Vue 3.6. The npm installation applies a two-line declaration patch for Vue 3.5. Recheck the patch when upgrading either package.
+
 CI additionally verifies snapshot provenance against GitHub and runs both browser
 suites before a tagged image can be published. `@intlify/devtools-types` is an explicit development dependency because the
 pinned vue-i18n declaration files import it; knip ignores only that indirect type use.

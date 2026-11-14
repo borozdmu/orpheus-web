@@ -21,7 +21,8 @@
     "stack:stop": "node scripts/stack.mjs stop",
     "test:integration": "node scripts/stack.mjs test",
     "audit": "npm audit --audit-level=moderate",
-    "lint:api": "redocly lint --config redocly.yaml api/upstream.yaml"
+    "lint:api": "redocly lint --config redocly.yaml api/upstream.yaml",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.3.0",
@@ -29,8 +30,8 @@
     "highlight.js": "^11.11.1",
     "lucide-vue-next": "^0.475.0",
     "markdown-it": "^14.3.2",
-    "vue": "^3.5.13",
-    "vue-i18n": "11.1.12",
+    "vue": "~3.5.45",
+    "vue-i18n": "11.4.20",
     "vue-router": "^5.0.7"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "jsdom": "^26.0.0",
     "knip": "^6.11.0",
     "openapi-typescript": "^7.13.0",
+    "patch-package": "^8.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.2",
@@ -60,7 +62,14 @@
     "brace-expansion": "5.0.12",
     "js-yaml": "^4.3.2",
     "nanoid": "^3.3.18",
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.10",
+    "js-beautify": {
+      "glob": "14.0.6",
+      "editorconfig": "4.0.1"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.8"
+    }
   },
   "engines": {
     "node": ">=24.0.0"
