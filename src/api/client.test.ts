@@ -1,8 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ApiError, get, logout, onAccessFailure } from './client'
 import { PathsApiV1SessionsGetParametersQueryActivity as Activity } from './generated'
-afterEach(() => vi.unstubAllGlobals())
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs() })
 describe('API transport', () => {
+  it('keeps reads and logout below the configured ingress prefix', async () => {
+    vi.stubEnv('BASE_URL', '/orpheus/')
+    const fetcher = vi.fn().mockResolvedValue(Response.json({ items: [] }))
+    vi.stubGlobal('fetch', fetcher)
+    await get('/api/v1/sessions/{sid}', { path: { sid: 'a/b' }, signal: new AbortController().signal })
+    await logout(new AbortController().signal)
+    expect(fetcher.mock.calls.map(([url]) => url)).toEqual(['/orpheus/api/v1/sessions/a%2Fb', '/orpheus/auth/logout'])
+  })
   it('encodes opaque keys and passes the abort signal and same-origin credentials', async () => {
     const fetcher = vi.fn().mockResolvedValue(Response.json({ items: [], next_cursor: null }))
     vi.stubGlobal('fetch', fetcher)

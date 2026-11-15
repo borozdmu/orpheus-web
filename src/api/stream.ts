@@ -1,4 +1,5 @@
 import { checkResponse } from './client'
+import { appPath } from '../base'
 import type { Event } from './generated'
 
 export class SSEDecoder {
@@ -35,7 +36,7 @@ export class SSEDecoder {
 }
 
 export async function streamEvents(sid: string, cursor: string, signal: AbortSignal, receive: (event: Event) => void, connected: () => void) {
-  const response = await fetch(`/api/v1/sessions/${encodeURIComponent(sid)}/events/stream?${new URLSearchParams({ after: cursor })}`, {
+  const response = await fetch(appPath(`/api/v1/sessions/${encodeURIComponent(sid)}/events/stream?${new URLSearchParams({ after: cursor })}`), {
     signal, credentials: 'same-origin', headers: { Accept: 'text/event-stream' },
   })
   await checkResponse(response)

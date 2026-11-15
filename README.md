@@ -187,6 +187,21 @@ ingress must preserve the browser Host, Origin, Cookie and Set-Cookie headers,
 disable buffering for SSE, and allow long-lived streams. No BFF, auth proxy or
 shared Bearer injection is used.
 
+For a deployment below a URL prefix, build with
+`--build-arg ORPHEUS_WEB_BASE_PATH=/orpheus/`. The prefix must start and end
+with `/`; its default is `/`. Configure the ingress to route only that prefix
+and strip it before forwarding to this container. API requests, SSE, assets,
+navigation and deep links stay under the prefix. For development, set the same
+environment variable before `npm run dev`.
+
+This is suitable for read-only access protected by the ingress. The core's
+SAML callback endpoints still require their documented root-origin routes;
+this option alone does not relocate a SAML deployment.
+
+Run the prefix browser test with
+`ORPHEUS_WEB_BASE_PATH=/orpheus/ ORPHEUS_WEB_TEST_PORT=14173 npm run e2e`.
+`ORPHEUS_WEB_TEST_PORT` also selects a free port for the regular browser suite.
+
 Configure browser access **in the core**, not in this image:
 
 | Core mode | UI behavior |
@@ -255,6 +270,8 @@ Vulnerability checks need network access to refresh advisory databases; `api:che
 and type generation remain offline. `make audit`, `make vuln`, `make deadcode` and
 `make lint-docker` also run separately. The filesystem scan does not inspect OS
 packages in the final nginx image.
+
+Vue 3.5 uses a single component instance type. The pinned vue-i18n 11.4.20 declarations also name an instance type from Vue 3.6. The npm installation applies a two-line declaration patch for Vue 3.5. Recheck the patch when upgrading either package.
 
 CI additionally verifies snapshot provenance against GitHub and runs both browser
 suites before a tagged image can be published. `@intlify/devtools-types` is an explicit development dependency because the

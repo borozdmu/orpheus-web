@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted, ref, shallowRef } from 'vue'
 import { get, logout, onAccessFailure } from '../api/client'
+import { appPath } from '../base'
 import { BrowserAuthSessionMode, type BrowserAuthSession } from '../api/generated'
 
 export function useAuth() {
@@ -12,7 +13,7 @@ export function useAuth() {
   })
 
   function login() {
-    window.location.assign(`/auth/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`)
+    window.location.assign(appPath(`/auth/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`))
   }
   async function load() {
     controller.abort()

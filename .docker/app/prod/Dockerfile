@@ -1,8 +1,10 @@
 FROM --platform=$BUILDPLATFORM node:26.7.0-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY patches/ patches/
 RUN npm ci
 COPY . .
+ARG ORPHEUS_WEB_BASE_PATH=/
 RUN npm run api:check && npm run build
 
 FROM nginx:1.28-alpine

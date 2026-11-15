@@ -1,4 +1,5 @@
 import type { ErrorResponse, paths } from './generated'
+import { appPath } from '../base'
 
 type JSONGet<P> = P extends { get: { responses: { 200: { content: { 'application/json': unknown } } } } } ? P : never
 type GetPath = { [P in keyof paths]: JSONGet<paths[P]> extends never ? never : P }[keyof paths]
@@ -31,7 +32,7 @@ export async function get<P extends GetPath>(path: P, options: {
   signal: AbortSignal
   query?: Query<P>
 } & (PathParams<P> extends undefined ? { path?: never } : { path: PathParams<P> })): Promise<Response<P>> {
-  let url: string = path
+  let url: string = appPath(path)
   for (const [name, value] of Object.entries(options.path ?? {})) url = url.replace(`{${name}}`, encodeURIComponent(String(value)))
   const query = new URLSearchParams()
   for (const [name, value] of Object.entries(options.query ?? {})) {
@@ -45,7 +46,7 @@ export async function get<P extends GetPath>(path: P, options: {
 }
 
 export async function logout(signal: AbortSignal) {
-  const response = await fetch('/auth/logout', {
+  const response = await fetch(appPath('/auth/logout'), {
     method: 'POST', credentials: 'same-origin', signal, headers: { 'X-Orpheus-CSRF': '1' },
   })
   await checkResponse(response, false)
